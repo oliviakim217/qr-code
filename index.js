@@ -5,18 +5,28 @@
 */
 
 import inquirer from 'inquirer';
+import qr from 'qr-image';
+import fs from 'fs';
 
-const questions = [
+const question = [
     {
-        type: 'input',
-        name: 'url',
-        message: 'Please enter a URL: ',
-        when(answers) {
-            return answers.comments !== 'Thanks!';
-        }
+        type: "input",
+        name: "url",
+        message: "Please write the URL: "
     }
-];
+]
 
-inquirer.prompt(questions).then((answers) => {
-    console.log(JSON.stringify(answers, null, '  '));
-});
+
+inquirer
+  .prompt(question)
+  .then((answers) => {
+        // Get the user input
+        console.log(answers);
+  })
+  .catch((error) => {
+    if (error.isTtyError) {
+      console.log("Prompt couldn't be rendered in the current environment")
+    } else {
+      console.log("Something else went wrong")
+    }
+  });
