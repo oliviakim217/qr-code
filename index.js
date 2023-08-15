@@ -6,22 +6,27 @@
 
 import inquirer from 'inquirer';
 import qr from 'qr-image';
-import fs from 'fs';
-
-const question = [
-    {
-        type: "input",
-        name: "url",
-        message: "Please write the URL: "
-    }
-]
-
+import * as fs from 'fs';
 
 inquirer
-  .prompt(question)
+  .prompt([
+    {
+        type: "input",
+        name: "URL",
+        message: "Please write your URL: "
+    }
+ ])
   .then((answers) => {
-        // Get the user input
-        console.log(answers);
+        console.log(answers.URL); // User typed url
+        var qr_svg = qr.image(answers.URL);
+        qr_svg.pipe(fs.createWriteStream('qr_code.png'));
+        
+        // Create a text file to save the URL
+        fs.writeFile('url.txt', answers.URL, (err) => {
+            if (err) throw err;
+            console.log('The file has been saved!')
+        })
+        
   })
   .catch((error) => {
     if (error.isTtyError) {
